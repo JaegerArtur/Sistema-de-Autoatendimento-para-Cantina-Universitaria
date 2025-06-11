@@ -1,0 +1,50 @@
+Trabalho de Implementação
+
+Curso: Ciência da Computação (URI - Santo Ângelo)
+Disciplina: Linguagem de Programação III
+Professor: Prof. Denilson Rodrigues da Silva
+
+SISTEMA DE AUTOATENDIMENTO PARA CANTINA UNIVERSITÁRIA - JAVA
+Objetivo
+O objetivo deste trabalho é desenvolver um protótipo (em software) de um terminal digital de
+autoatendimento para uma cantina universitária, simulando o processo de compra de refeições, lanches e
+bebidas por parte de alunos, professores ou visitantes. O sistema deverá contemplar tanto a interface de uso
+público (autoatendimento) quanto as funcionalidades administrativas, como controle de estoque,
+abastecimento de produtos, retirada de valores e geração de relatórios.
+
+Este sistema simula o funcionamento de um totem interativo, semelhante aos utilizados em redes de
+fast-food, onde o cliente interage com uma tela digital para realizar pedidos, efetuar pagamentos e visualizar
+informações. Não se trata de uma máquina que entrega fisicamente os produtos, mas sim de uma aplicação
+que representa o fluxo de atendimento digital da cantina.
+
+Requisitos do Protótipo
+- Controle de estoque de produtos disponíveis (itens alimentícios e bebidas);
+- Simulação de pagamentos com troco (o grupo define se será com moedas, cédulas ou ambos);
+- Identificação/autenticação para acesso à área administrativa do sistema (abastecimento e retirada de
+valores);
+- Tratamento de situações excepcionais: venda de produto em falta, ausência de troco, cancelamento de
+compra, etc.;
+- Geração de relatórios personalizados, como:
+* Produtos mais vendidos;
+* Horários de maior movimento;
+* Transações realizadas (com data e hora);
+* Produtos vencidos ou próximos do vencimento (caso aplicável);
+- Interface gráfica com componentes visuais (janelas, botões, imagens, etc.) que simulem a experiência real
+de um terminal de autoatendimento.
+
+Requisitos de Modelagem e Implementação
+- O sistema deverá ser modelado e implementado utilizando os princípios da programação orientada a
+objetos (encapsulamento, herança, polimorfismo);
+- Toda a documentação das classes deverá ser gerada com a ferramenta javadoc;
+
+- A interface gráfica fica a critério dos desenvolvedores (estética, disposição, estilo);
+- O ambiente padrão de desenvolvimento será o BlueJ. Caso o grupo opte por outra IDE (NetBeans, Eclipse,
+etc.), deve garantir a compatibilidade da execução;
+- A lógica da aplicação deve ser desenvolvida independentemente da interface gráfica;
+- O trabalho será realizado em duplas. É possível a realização individual, mantendo os mesmos critérios de
+avaliação;
+- A entrega deve conter:
+* O protótipo funcional do sistema;
+* Os arquivos fonte;
+* A documentação das classes gerada em javadoc;
+* Um arquivo ".jar" executável do sistema.
