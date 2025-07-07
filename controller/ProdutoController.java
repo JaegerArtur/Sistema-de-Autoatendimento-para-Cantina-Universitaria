@@ -1,35 +1,17 @@
 package controller;
 
+import model.Produto;
+import service.ProdutoService;
+import exception.ProdutoNaoExisteException;
+import java.util.List;
 
-/**
- * Escreva uma descrição da classe ProdutoController aqui.
- * 
- * @author (seu nome) 
- * @version (um número da versão ou uma data)
- */
-public class ProdutoController
-{
-    // variáveis de instância - substitua o exemplo abaixo pelo seu próprio
-    private int x;
+public class ProdutoController {
 
-    /**
-     * Construtor para objetos da classe ProdutoController
-     */
-    public ProdutoController()
-    {
-        // inicializa variáveis de instância
-        x = 0;
+    public static List<Produto> listarProdutos() {
+        return ProdutoService.getProdutos();
     }
 
-    /**
-     * Um exemplo de um método - substitua este comentário pelo seu próprio
-     * 
-     * @param  y   um exemplo de um parâmetro de método
-     * @return     a soma de x e y 
-     */
-    public int sampleMethod(int y)
-    {
-        // escreva seu código aqui
-        return x + y;
+    public static Produto buscarProdutoPorId(String id) throws ProdutoNaoExisteException {
+        return ProdutoService.getProdutoId(id);
     }
 }

@@ -1,35 +1,64 @@
 package model;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Escreva uma descrição da classe Estoque aqui.
+ * Representa o estoque de produtos da cantina.<p>
+ * Mantém um mapeamento entre o ID do produto e sua quantidade disponível.<br>
+ * Permite consultar, adicionar, remover e atualizar quantidades.
  * 
- * @author (seu nome) 
- * @version (um número da versão ou uma data)
+ * @author Grupo Artur, João e Miguel
+ * @version 1.0
  */
-public class Estoque
-{
-    // variáveis de instância - substitua o exemplo abaixo pelo seu próprio
-    private int x;
+public class Estoque {
+
+    private Map<String, Integer> produtos;
 
     /**
-     * Construtor para objetos da classe Estoque
+     * Cria um novo estoque vazio.
      */
-    public Estoque()
-    {
-        // inicializa variáveis de instância
-        x = 0;
+    public Estoque() {
+        this.produtos = new HashMap<>();
     }
 
     /**
-     * Um exemplo de um método - substitua este comentário pelo seu próprio
-     * 
-     * @param  y   um exemplo de um parâmetro de método
-     * @return     a soma de x e y 
+     * Define a quantidade exata de um produto no estoque.
+     *
+     * @param idProduto O ID do produto.
+     * @param quantidade A nova quantidade.
      */
-    public int sampleMethod(int y)
-    {
-        // escreva seu código aqui
-        return x + y;
+    public void atualizarQuantidade(String idProduto, int quantidade) {
+        this.produtos.put(idProduto, quantidade);
     }
+
+    /**
+     * Obtém a quantidade disponível de um produto.
+     *
+     * @param idProduto O ID do produto.
+     * @return A quantidade disponível, ou 0 se não estiver no estoque.
+     */
+    public int getQuantidade(String idProduto) {
+        return this.produtos.getOrDefault(idProduto, 0);
+    }
+
+    /**
+     * Retorna todos os IDs de produtos presentes no estoque.
+     *
+     * @return Um conjunto com todos os IDs de produtos.
+     */
+    public Set<String> getTodosProdutos() {
+        return this.produtos.keySet();
+    }
+
+    /**
+     * Retorna o mapa completo de produtos e quantidades.
+     *
+     * @return Um mapa do ID do produto para a quantidade.
+     */
+    public Map<String, Integer> getMapaProdutos() {
+        return this.produtos;
+    }
+
 }

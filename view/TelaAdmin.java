@@ -1,35 +1,32 @@
 package view;
 
+import javax.swing.*;
+import java.awt.*;
 
-/**
- * Escreva uma descrição da classe TelaAdmin aqui.
- * 
- * @author (seu nome) 
- * @version (um número da versão ou uma data)
- */
-public class TelaAdmin
-{
-    // variáveis de instância - substitua o exemplo abaixo pelo seu próprio
-    private int x;
+public class TelaAdmin extends JFrame {
+    public TelaAdmin() {
+        setTitle("Painel Administrativo - Cantina");
+        setSize(1000, 700);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-    /**
-     * Construtor para objetos da classe TelaAdmin
-     */
-    public TelaAdmin()
-    {
-        // inicializa variáveis de instância
-        x = 0;
-    }
+        JLabel titulo = new JLabel("Painel do Administrador", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 36));
+        add(titulo, BorderLayout.NORTH);
 
-    /**
-     * Um exemplo de um método - substitua este comentário pelo seu próprio
-     * 
-     * @param  y   um exemplo de um parâmetro de método
-     * @return     a soma de x e y 
-     */
-    public int sampleMethod(int y)
-    {
-        // escreva seu código aqui
-        return x + y;
+        JPanel botoes = new JPanel(new GridLayout(2, 3, 40, 40));
+        String[] opcoes = {"Relatórios", "Produtos", "Usuários", "Estoque", "Caixa", "Sair"};
+        for (String opcao : opcoes) {
+            JButton btn = new JButton(opcao);
+            btn.setFont(new Font("Arial", Font.BOLD, 28));
+            btn.setBackground(new Color(255, 230, 0));
+            btn.setFocusPainted(false);
+            botoes.add(btn);
+        }
+        botoes.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+        add(botoes, BorderLayout.CENTER);
+
+        setVisible(true);
     }
 }

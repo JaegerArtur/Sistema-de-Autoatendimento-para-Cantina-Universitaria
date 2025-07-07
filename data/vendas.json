@@ -1,0 +1,23 @@
+[
+  {
+    "id": "v1",
+    "cpfUsuario": "12345678900",
+    "dataHoraVenda": "2025-07-04T10:30:00",
+    "itens": {
+      "d9b1c2a3-f62e-4a4d-bdf3-1d142e09ecb9": 2,
+      "3fa85f64-5717-4562-b3fc-2c963f66afa6": 1
+    },
+    "valorTotal": 18.0,
+    "formaPagamento": "DINHEIRO"
+  },
+  {
+    "id": "v2",
+    "cpfUsuario": "",
+    "dataHoraVenda": "2025-07-03T15:45:00",
+    "itens": {
+      "4d3f4a63-97ae-41a2-9ed5-1a0bc6cb5390": 5
+    },
+    "valorTotal": 5.0,
+    "formaPagamento": "SALDO"
+  }
+]

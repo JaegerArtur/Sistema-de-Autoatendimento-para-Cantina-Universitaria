@@ -1,35 +1,44 @@
 package controller;
 
+import model.Usuario;
+import service.UsuarioService;
+import exception.UsuarioNaoExisteException;
+import exception.SaldoInsuficienteException;
 
-/**
- * Escreva uma descrição da classe UsuarioController aqui.
- * 
- * @author (seu nome) 
- * @version (um número da versão ou uma data)
- */
 public class UsuarioController
 {
-    // variáveis de instância - substitua o exemplo abaixo pelo seu próprio
-    private int x;
-
     /**
-     * Construtor para objetos da classe UsuarioController
+     * Busca um usuário pelo CPF.
      */
-    public UsuarioController()
-    {
-        // inicializa variáveis de instância
-        x = 0;
+    public static Usuario buscarPorCpf(String cpf) throws UsuarioNaoExisteException {
+        return UsuarioService.getUsuarioPorCpf(cpf);
     }
 
     /**
-     * Um exemplo de um método - substitua este comentário pelo seu próprio
-     * 
-     * @param  y   um exemplo de um parâmetro de método
-     * @return     a soma de x e y 
+     * Busca um admin pelo login.
      */
-    public int sampleMethod(int y)
-    {
-        // escreva seu código aqui
-        return x + y;
+    public static Usuario buscarPorLogin(String login) throws UsuarioNaoExisteException {
+        return UsuarioService.getUsuarioPorLogin(login);
+    }
+
+    /**
+     * Adiciona saldo a um membro.
+     */
+    public static void adicionarSaldo(String cpf, double valor) throws UsuarioNaoExisteException {
+        UsuarioService.adicionarSaldoUsuario(cpf, valor);
+    }
+
+    /**
+     * Subtrai saldo de um membro.
+     */
+    public static void subtrairSaldo(String cpf, double valor) throws SaldoInsuficienteException,UsuarioNaoExisteException {
+        UsuarioService.subtraiSaldoUsuario(cpf, valor);
+    }
+
+    /**
+     * Retorna o saldo de um membro.
+     */
+    public static double consultarSaldo(String cpf) throws UsuarioNaoExisteException {
+        return UsuarioService.getSaldoUsuario(cpf);
     }
 }
