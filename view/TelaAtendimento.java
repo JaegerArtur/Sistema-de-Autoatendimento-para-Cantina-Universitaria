@@ -1,3 +1,11 @@
+
+/**
+ * Tela principal de autoatendimento para seleção e compra de produtos na cantina universitária.
+ * Permite adicionar/remover itens ao carrinho, visualizar produtos e finalizar pedidos.
+ *
+ * @author Grupo Artur, João Lucas e Miguel
+ * @version 1.0
+ */
 package view;
 
 import javax.swing.*;
@@ -15,7 +23,14 @@ public class TelaAtendimento extends JFrame {
     private Map<String, Produto> produtoMap;
     private Usuario usuario;
 
+    /**
+     * Cria a tela de autoatendimento, exibindo produtos disponíveis e o carrinho do usuário.
+     * @param carrinho Carrinho de compras atual.
+     * @param usuario Usuário autenticado (membro, visitante ou admin).
+     */
     public TelaAtendimento(LinkedHashMap<String, Integer> carrinho, Usuario usuario) {
+        // Garante que o estoque está carregado antes de qualquer acesso
+        controller.EstoqueController.carregarEstoque();
         setTitle("Autoatendimento - Cantina Universitária");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1170, 660);

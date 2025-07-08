@@ -38,11 +38,11 @@ public class PagamentoService
      */
     public static void pagarComSaldo(Venda venda) throws SaldoInsuficienteException,UsuarioNaoExisteException {
         double valorTotal = venda.getValorTotal();
-        double saldo = UsuarioService.getSaldoUsuario(venda.getCpfUsuario());
+        double saldo = UsuarioService.consultarSaldoMembro(venda.getCpfUsuario());
         if (saldo < valorTotal) {
             throw new SaldoInsuficienteException();
         }
-        UsuarioService.subtraiSaldoUsuario(venda.getCpfUsuario(), valorTotal);
+        UsuarioService.alterarSaldoMembro(venda.getCpfUsuario(), -valorTotal);
     }
 
     /**
@@ -54,7 +54,7 @@ public class PagamentoService
      */
     public static double pagarComSaldoEDinheiro(Venda venda, double valorDinheiro) throws SaldoInsuficienteException,UsuarioNaoExisteException {
         double valorTotal = venda.getValorTotal();
-        double saldo = UsuarioService.getSaldoUsuario(venda.getCpfUsuario());
+        double saldo = UsuarioService.consultarSaldoMembro(venda.getCpfUsuario());
         if (saldo + valorDinheiro < valorTotal) {
             throw new SaldoInsuficienteException();
         }
@@ -71,7 +71,7 @@ public class PagamentoService
      */
     public static boolean podePagarComSaldo(Venda venda) throws UsuarioNaoExisteException {
         double valorTotal = venda.getValorTotal();
-        double saldo = UsuarioService.getSaldoUsuario(venda.getCpfUsuario());
+        double saldo = UsuarioService.consultarSaldoMembro(venda.getCpfUsuario());
         return saldo >= valorTotal;
     }
 
@@ -87,7 +87,7 @@ public class PagamentoService
      */
     public static boolean podePagarComSaldoEDinheiro(Venda venda, double valorDinheiro) throws UsuarioNaoExisteException {
         double valorTotal = venda.getValorTotal();
-        double saldo = UsuarioService.getSaldoUsuario(venda.getCpfUsuario());
+        double saldo = UsuarioService.consultarSaldoMembro(venda.getCpfUsuario());
         return saldo + valorDinheiro >= valorTotal;
     }
 }

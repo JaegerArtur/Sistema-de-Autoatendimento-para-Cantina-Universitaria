@@ -41,6 +41,10 @@ public class ProdutoService {
         throw new ProdutoNaoExisteException();
     }
 
+    /**
+     * Retorna a lista de produtos carregada em memória.
+     * Garante que a lista está carregada apenas uma vez por execução.
+     */
     public static List<Produto> getProdutos() {
         if (produtos == null) {
             carregarProdutos();

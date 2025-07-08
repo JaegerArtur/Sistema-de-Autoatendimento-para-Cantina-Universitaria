@@ -48,25 +48,16 @@ public class UsuarioService
     }
 
     /**
-     * Adiciona saldo ao usuário.
+     * Altera o saldo de um membro (valor positivo para adicionar, negativo para subtrair).
      */
-    public static void adicionarSaldoUsuario(String cpf, double valor) throws UsuarioNaoExisteException {
+    public static void alterarSaldoMembro(String cpf, double valor) throws SaldoInsuficienteException, UsuarioNaoExisteException {
         Usuario usuario = getUsuarioPorCpf(cpf);
         if (usuario instanceof Membro) {
-            ((Membro)usuario).addSaldo(valor);
-            salvarUsuarios(usuarios);
-        } else {
-            throw new UnsupportedOperationException("Apenas membros possuem saldo.");
-        }
-    }
-
-    /**
-     * Subtrai saldo do usuário.
-     */
-    public static void subtraiSaldoUsuario(String cpf, double valor) throws SaldoInsuficienteException,UsuarioNaoExisteException {
-        Usuario usuario = getUsuarioPorCpf(cpf);
-        if (usuario instanceof Membro) {
-            ((Membro)usuario).subtraiSaldo(valor);
+            if (valor >= 0) {
+                ((Membro)usuario).addSaldo(valor);
+            } else {
+                ((Membro)usuario).subtraiSaldo(-valor);
+            }
             salvarUsuarios(usuarios);
         } else {
             throw new UnsupportedOperationException("Apenas membros possuem saldo.");
@@ -86,12 +77,9 @@ public class UsuarioService
     }
 
     /**
-     * Adiciona saldo ao usuário especificado.
-     * 
-     * @param cpf   CPF do usuário que receberá o saldo.
-     * @param valor Valor a ser adicionado ao saldo do usuário.
+     * Consulta o saldo de um membro.
      */
-    public static double getSaldoUsuario(String cpf) throws UsuarioNaoExisteException {
+    public static double consultarSaldoMembro(String cpf) throws UsuarioNaoExisteException {
         Usuario usuario = getUsuarioPorCpf(cpf);
         if (usuario instanceof Membro) {
             return ((Membro)usuario).getSaldo();

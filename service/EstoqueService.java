@@ -70,10 +70,10 @@ public class EstoqueService {
     }
 
     /**
-     * Retorna o mapa completo de produtos e quantidades.
+     * Retorna o mapa completo de produtos e quantidades (cópia defensiva).
      */
     public static Map<String, Integer> getMapaProdutos() {
-        return estoque.getMapaProdutos();
+        return new HashMap<>(estoque.getMapaProdutos());
     }
 
     /**
@@ -98,10 +98,5 @@ public class EstoqueService {
         salvarEstoque(estoque);
     }
 
-    /**
-     * Retorna o estoque atual de todos os produtos.
-     */
-    public static Map<String, Integer> listarEstoqueAtual() {
-        return new HashMap<>(estoque.getMapaProdutos());
-    }
+    // Método removido: listarEstoqueAtual (uso redundante, utilize getMapaProdutos)
 }

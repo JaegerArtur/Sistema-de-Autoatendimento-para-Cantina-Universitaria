@@ -58,7 +58,7 @@ public class VendaService
             }
         }
         if (venda.getFormaPagamento() == FormaPagamento.SALDO) {
-             double saldo = UsuarioService.getSaldoUsuario(venda.getCpfUsuario());
+            double saldo = UsuarioService.consultarSaldoMembro(venda.getCpfUsuario());
             if (saldo < venda.getValorTotal()) {
                 throw new SaldoInsuficienteException();
             }
@@ -81,7 +81,7 @@ public class VendaService
      * @return Lista de vendas registradas.
      */
     public static List<Venda> obterVendas() {
-        return new ArrayList<>(vendas); // Retorna uma cópia da lista de vendas
+        return new ArrayList<>(vendas);
     }
 
     /**

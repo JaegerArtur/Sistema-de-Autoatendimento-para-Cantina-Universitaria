@@ -3,15 +3,13 @@ package controller.handlers;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import model.Usuario;
-import model.Membro;
-import model.Venda;
-import model.enums.FormaPagamento;
-import model.enums.Dinheiro;
+import model.*;
+import model.enums.*;
 import controller.PagamentoController;
 import java.util.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.awt.Font;
 
 public class PagamentoDinheiroHandler implements ActionListener {
     private JFrame parent;
@@ -30,57 +28,47 @@ public class PagamentoDinheiroHandler implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         boolean pago = false;
         while (!pago) {
-            // 1. Pergunta ao usuário quais notas/moedas está entregando
+            // Novo menu prático para informar notas/moedas
+            Map<Double, Integer> entregueMenu = view.components.MenuNotasMoedas.mostrar(parent, total);
+            if (entregueMenu == null) {
+                // Restaura fontes
+                SwingUtilities.invokeLater(() -> resetPopupFontSize());
+                return; // Cancelado
+            }
             Map<Dinheiro, Integer> entregue = new HashMap<>();
             double valorEntregue = 0.0;
-            // Primeiro, moedas
-            JOptionPane.showMessageDialog(parent, "Informe as quantidades de cada moeda entregue:", "Pagamento em Dinheiro", JOptionPane.INFORMATION_MESSAGE);
-            for (Dinheiro tipo : Dinheiro.values()) {
-                if (tipo.name().startsWith("MOEDA_")) {
-                    String label = String.format("Moeda de R$ %.2f", tipo.getValor()).replace(".", ",");
-                    String qtdStr = JOptionPane.showInputDialog(parent, label + " - Quantidade:", "Pagamento em Dinheiro", JOptionPane.PLAIN_MESSAGE);
-                    if (qtdStr == null) return; // Cancelado
-                    int qtd = 0;
-                    try { qtd = Integer.parseInt(qtdStr); } catch (Exception ex) { qtd = 0; }
-                    if (qtd > 0) {
-                        entregue.put(tipo, qtd);
-                        valorEntregue += tipo.getValor() * qtd;
-                    }
-                }
-            }
-            // Depois, cédulas
-            JOptionPane.showMessageDialog(parent, "Informe as quantidades de cada cédula entregue:", "Pagamento em Dinheiro", JOptionPane.INFORMATION_MESSAGE);
-            for (Dinheiro tipo : Dinheiro.values()) {
-                if (tipo.name().startsWith("CEDULA_")) {
-                    String label = String.format("Cédula de R$ %.2f", tipo.getValor()).replace(".", ",");
-                    String qtdStr = JOptionPane.showInputDialog(parent, label + " - Quantidade:", "Pagamento em Dinheiro", JOptionPane.PLAIN_MESSAGE);
-                    if (qtdStr == null) return; // Cancelado
-                    int qtd = 0;
-                    try { qtd = Integer.parseInt(qtdStr); } catch (Exception ex) { qtd = 0; }
-                    if (qtd > 0) {
-                        entregue.put(tipo, qtd);
-                        valorEntregue += tipo.getValor() * qtd;
+            for (Map.Entry<Double, Integer> entry : entregueMenu.entrySet()) {
+                double valor = entry.getKey();
+                int qtd = entry.getValue();
+                if (qtd > 0) {
+                    for (Dinheiro tipo : Dinheiro.values()) {
+                        if (Math.abs(tipo.getValor() - valor) < 0.001) {
+                            entregue.put(tipo, qtd);
+                            valorEntregue += valor * qtd;
+                        }
                     }
                 }
             }
             if (valorEntregue < total) {
-                JOptionPane.showMessageDialog(parent, "Valor insuficiente!", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, "Valor entregue insuficiente!", "Atenção", JOptionPane.WARNING_MESSAGE);
+                SwingUtilities.invokeLater(() -> resetPopupFontSize());
                 continue;
             }
             double troco = valorEntregue - total;
             // 2. Verifica se o caixa pode dar o troco (considerando o caixa + o que foi entregue)
-            Map<Dinheiro, Integer> caixaSimulado = new HashMap<>(PagamentoController.getNotasMoedas());
-            for (Map.Entry<Dinheiro, Integer> entry : entregue.entrySet()) {
-                caixaSimulado.put(entry.getKey(), caixaSimulado.getOrDefault(entry.getKey(), 0) + entry.getValue());
-            }
-            if (PagamentoController.calcularTrocoDetalhado(troco, caixaSimulado) == null) {
+            // Garante que o caixa simulado parte do caixa real carregado do arquivo
+            Map<Dinheiro, Integer> caixaReal = PagamentoController.getNotasMoedas();
+
+            if (PagamentoController.calcularTrocoDetalhado(troco) == null) {
                 JOptionPane.showMessageDialog(parent, "Não é possível fornecer o troco exato com as notas/moedas disponíveis no caixa (após receber o pagamento)!", "Erro", JOptionPane.ERROR_MESSAGE);
+                SwingUtilities.invokeLater(() -> resetPopupFontSize());
                 continue;
             }
             // 3. Calcula detalhamento do troco usando o caixa simulado (após receber o pagamento)
-            Map<Dinheiro, Integer> trocoDetalhado = PagamentoController.calcularTrocoDetalhado(troco, caixaSimulado);
+            Map<Dinheiro, Integer> trocoDetalhado = PagamentoController.calcularTrocoDetalhado(troco);
             if (trocoDetalhado == null) {
                 JOptionPane.showMessageDialog(parent, "Erro ao calcular o troco detalhado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                SwingUtilities.invokeLater(() -> resetPopupFontSize());
                 continue;
             }
             // 4. Atualiza o caixa: adiciona o que foi entregue
@@ -96,29 +84,50 @@ public class PagamentoDinheiroHandler implements ActionListener {
                 String cpf = (usuario instanceof Membro) ? ((Membro)usuario).getCpf() : usuario.getNome();
                 String dataHora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
                 Venda venda = new Venda(cpf, dataHora, new LinkedHashMap<>(carrinho), FormaPagamento.DINHEIRO);
-                PagamentoController.realizarPagamentoDinheiro(venda, valorEntregue);
-                // 6. Exibe detalhamento do troco
-                StringBuilder sb = new StringBuilder();
-                sb.append("Pagamento realizado com sucesso!\nTroco: R$ ").append(String.format("%.2f", troco)).append("\n\nDetalhamento do troco:\n");
-                for (Map.Entry<Dinheiro, Integer> entry : trocoDetalhado.entrySet()) {
-                    if (entry.getValue() > 0) {
-                        sb.append(entry.getValue()).append(" x ")
-                          .append(entry.getKey().name().replace("MOEDA_", "Moeda R$ ").replace("CEDULA_", "Cédula R$ "))
-                          .append(String.format("%.2f", entry.getKey().getValor())).append("\n");
+                boolean sucesso = controller.VendaController.processarVenda(venda, valorEntregue);
+                if (sucesso) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Pagamento realizado com sucesso!\nTroco: R$ ").append(String.format("%.2f", troco));
+                    if(troco > 0) sb.append("\n\nDetalhamento do troco:\n");
+                    for (Map.Entry<Dinheiro, Integer> entry : trocoDetalhado.entrySet()) {
+                        if (entry.getValue() > 0) {
+                            sb.append(entry.getValue()).append(" x ");
+                            if (entry.getKey().name().startsWith("MOEDA_")) {
+                                sb.append("Moeda R$ ");
+                            } else {
+                                sb.append("Cédula R$ ");
+                            }
+                            sb.append(String.format("%.2f", entry.getKey().getValor()).replace(".", ",")).append("\n");
+                        }
                     }
+                    JOptionPane.showMessageDialog(parent, sb.toString(), "Pagamento", JOptionPane.INFORMATION_MESSAGE);
+                    carrinho.clear();
+                    parent.dispose();
+                    new view.TelaLogin();
+                    pago = true;
+                    SwingUtilities.invokeLater(() -> resetPopupFontSize());
+                } else {
+                    JOptionPane.showMessageDialog(parent, "Erro ao processar pagamento.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    SwingUtilities.invokeLater(() -> resetPopupFontSize());
+                    return;
                 }
-                JOptionPane.showMessageDialog(parent, sb.toString(), "Pagamento", JOptionPane.INFORMATION_MESSAGE);
-                carrinho.clear();
-                parent.dispose();
-                new view.TelaLogin();
-                pago = true;
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(parent, "Erro ao processar pagamento: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                SwingUtilities.invokeLater(() -> resetPopupFontSize());
                 return;
             }
         }
     }
 
-    // ...
+    // Restaura fontes dos popups
+    private void resetPopupFontSize() {
+        UIManager.put("OptionPane.messageFont", UIManager.getDefaults().getFont("OptionPane.messageFont"));
+        UIManager.put("OptionPane.buttonFont", UIManager.getDefaults().getFont("OptionPane.buttonFont"));
+        UIManager.put("OptionPane.font", UIManager.getDefaults().getFont("OptionPane.font"));
+        UIManager.put("TextField.font", UIManager.getDefaults().getFont("TextField.font"));
+        UIManager.put("ComboBox.font", UIManager.getDefaults().getFont("ComboBox.font"));
+        UIManager.put("Label.font", UIManager.getDefaults().getFont("Label.font"));
+        UIManager.put("Panel.font", UIManager.getDefaults().getFont("Panel.font"));
     }
+}
 

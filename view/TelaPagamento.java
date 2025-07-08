@@ -1,3 +1,11 @@
+
+/**
+ * Tela de pagamento do sistema de autoatendimento, exibindo opções de pagamento
+ * (dinheiro, saldo, saldo+dinheiro) e resumo do pedido.
+ *
+ * @author Grupo Artur, João Lucas e Miguel
+ * @version 1.0
+ */
 package view;
 
 import javax.swing.*;
@@ -10,9 +18,18 @@ import model.Membro;
 import model.Visitante;
 
 public class TelaPagamento extends JFrame {
+    /**
+     * Cria a tela de pagamento, exibindo resumo do pedido e opções de pagamento.
+     * @param resumoVenda Texto com o resumo da venda.
+     * @param total Valor total da compra.
+     * @param carrinho Carrinho de compras.
+     * @param produtoMap Mapa de produtos disponíveis.
+     * @param usuario Usuário autenticado.
+     */
     public TelaPagamento(String resumoVenda, double total, LinkedHashMap<String, Integer> carrinho, Map<String, Produto> produtoMap, Usuario usuario) {
         setTitle("Pagamento");
-        setSize(800, 600);
+        setSize(1170, 660);
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());

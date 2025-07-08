@@ -37,18 +37,17 @@ public class CaixaService {
      * Calcula o detalhamento do troco a partir do valor e das notas/moedas disponíveis.
      * Retorna um mapa com a quantidade de cada nota/moeda a ser devolvida, ou null se não for possível.
      */
-    public static Map<Dinheiro, Integer> calcularTrocoDetalhado(double troco, Map<Dinheiro, Integer> caixaDisponivel) {
+    public static Map<Dinheiro, Integer> calcularTrocoDetalhado(double troco) {
+        carregarCaixa();
         List<Dinheiro> ordenadas = new ArrayList<>(Arrays.asList(Dinheiro.values()));
         ordenadas.sort((a, b) -> Double.compare(b.getValor(), a.getValor()));
         int trocoCentavos = (int)Math.round(troco * 100);
-        Map<Dinheiro, Integer> melhor = backtrackTroco(ordenadas, caixaDisponivel, trocoCentavos, 0, new HashMap<>());
-        return melhor;
+        return backtrackTroco(ordenadas, notasMoedas, trocoCentavos, 0, new HashMap<>());
     }
 
     // Algoritmo de backtracking para encontrar uma combinação de troco
     private static Map<Dinheiro, Integer> backtrackTroco(List<Dinheiro> tipos, Map<Dinheiro, Integer> caixa, int restante, int idx, Map<Dinheiro, Integer> atual) {
         if (restante == 0) {
-            // Solução encontrada
             return new HashMap<>(atual);
         }
         if (restante < 0 || idx >= tipos.size()) {
@@ -192,5 +191,47 @@ public class CaixaService {
      */
     public static Map<Dinheiro, Integer> detalharConteudoCaixa() {
         return Collections.unmodifiableMap(new HashMap<>(notasMoedas));
+    }
+
+    /**
+     * Retira um valor do caixa, usando as maiores denominações possíveis.
+     * Lança IllegalArgumentException se não for possível.
+     */
+    /**
+     * Retira um valor do caixa e retorna o detalhamento das notas/moedas retiradas.
+     * @param valor Valor a ser retirado
+     * @return Mapa com a quantidade de cada nota/moeda retirada
+     */
+    public static Map<Dinheiro, Integer> retirarDoCaixaDetalhado(double valor) {
+        carregarCaixa();
+        if (valor <= 0) throw new IllegalArgumentException("Valor inválido.");
+        int valorCentavos = (int)Math.round(valor * 100);
+        List<Dinheiro> ordenadas = new ArrayList<>(Arrays.asList(Dinheiro.values()));
+        ordenadas.sort((a, b) -> Double.compare(b.getValor(), a.getValor()));
+        Map<Dinheiro, Integer> retirada = new HashMap<>();
+        int restante = valorCentavos;
+        for (Dinheiro tipo : ordenadas) {
+            int disponivel = notasMoedas.getOrDefault(tipo, 0);
+            int valTipo = (int)Math.round(tipo.getValor() * 100);
+            int qtd = Math.min(restante / valTipo, disponivel);
+            if (qtd > 0) {
+                retirada.put(tipo, qtd);
+                restante -= qtd * valTipo;
+            }
+        }
+        if (restante > 0) throw new IllegalArgumentException("Não há notas/moedas suficientes para retirar esse valor.");
+        // Remove as notas/moedas do caixa
+        for (Map.Entry<Dinheiro, Integer> entry : retirada.entrySet()) {
+            removerNotaMoeda(entry.getKey(), entry.getValue());
+        }
+        salvarCaixa();
+        return retirada;
+    }
+
+    /**
+     * Compatibilidade: método antigo sem detalhamento (mantido para não quebrar chamadas antigas)
+     */
+    public static void retirarDoCaixa(double valor) {
+        retirarDoCaixaDetalhado(valor);
     }
 }

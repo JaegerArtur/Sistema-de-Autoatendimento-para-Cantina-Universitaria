@@ -1,3 +1,11 @@
+
+/**
+ * Adapter para serialização e desserialização polimórfica de objetos Usuario (Membro, Admin, Visitante) com Gson.
+ * Permite gravar e ler o tipo de usuário no JSON, facilitando a persistência correta.
+ *
+ * @author Grupo Artur, João e Miguel
+ * @version 1.0
+ */
 package util;
 
 import com.google.gson.*;

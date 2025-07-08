@@ -1,3 +1,11 @@
+
+/**
+ * Controller responsável pela autenticação de usuários (membro e admin) no sistema.
+ * Realiza validação de senha e delega busca de usuários ao serviço correspondente.
+ *
+ * @author Grupo Artur, João Lucas e Miguel
+ * @version 1.0
+ */
 package controller;
 
 import service.UsuarioService;

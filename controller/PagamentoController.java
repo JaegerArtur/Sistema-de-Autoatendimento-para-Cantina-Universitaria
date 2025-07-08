@@ -67,8 +67,8 @@ public class PagamentoController {
      * @param caixaDisponivel Mapa de notas/moedas disponíveis
      * @return Mapa com a quantidade de cada nota/moeda a ser devolvida
      */
-    public static Map<Dinheiro, Integer> calcularTrocoDetalhado(double troco, Map<Dinheiro, Integer> caixaDisponivel) {
-        return CaixaService.calcularTrocoDetalhado(troco, caixaDisponivel);
+    public static Map<Dinheiro, Integer> calcularTrocoDetalhado(double troco) {
+        return CaixaService.calcularTrocoDetalhado(troco);
     }
 
     /**

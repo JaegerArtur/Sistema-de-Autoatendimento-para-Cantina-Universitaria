@@ -1,3 +1,12 @@
+
+/**
+ * Tela de login principal do sistema de autoatendimento da cantina universitária.
+ * Permite a escolha do tipo de usuário (Membro, Visitante ou Admin), integra teclado virtual
+ * e direciona para o fluxo correspondente após autenticação.
+ *
+ * @author Grupo Artur, João Lucas e Miguel
+ * @version 1.0
+ */
 package view;
 
 import javax.swing.*;
@@ -24,6 +33,9 @@ public class TelaLogin extends JFrame {
         if (tecladoVirtual != null) tecladoVirtual.setCampoFocado(campo);
     }
 
+    /**
+     * Cria a tela de login principal, inicializando componentes e handlers.
+     */
     public TelaLogin() {
         super("Lanchonete Universitária");
         LoginController.carregarUsuarios();
@@ -63,7 +75,31 @@ public class TelaLogin extends JFrame {
         // Teclado virtual (componente externo)
         tecladoVirtual = new TecladoVirtual();
 
-        TipoUsuarioHandler handler = new TipoUsuarioHandler(this, btnMembro, btnVisitante, btnAdmin, loginController, painelFormulario);
+        TipoUsuarioHandler handler = new TipoUsuarioHandler(this, btnMembro, btnVisitante, btnAdmin, loginController, painelFormulario) {
+            public void onLoginSucesso(Usuario usuario) {
+                if (usuario instanceof model.Membro) {
+                    int opcao = JOptionPane.showOptionDialog(
+                        TelaLogin.this,
+                        "Deseja adicionar saldo à sua conta?",
+                        "Opção de Saldo",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new Object[]{"Adicionar Saldo", "Ir para Autoatendimento"},
+                        "Adicionar Saldo"
+                    );
+                    TelaLogin.this.dispose();
+                    if (opcao == 0) {
+                        new view.TelaAdicionarSaldo((model.Membro) usuario);
+                    } else {
+                        new view.TelaAtendimento(new java.util.LinkedHashMap<>(), usuario);
+                    }
+                } else {
+                    TelaLogin.this.dispose();
+                    new view.TelaAtendimento(new java.util.LinkedHashMap<>(), usuario);
+                }
+            }
+        };
         btnMembro.addActionListener(handler);
         btnVisitante.addActionListener(handler);
         btnAdmin.addActionListener(handler);

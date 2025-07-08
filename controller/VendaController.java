@@ -1,10 +1,7 @@
 package controller;
 
 import model.Venda;
-import service.VendaService;
-import service.EstoqueService;
-import service.UsuarioService;
-import service.PagamentoService;
+import service.*;
 import service.CaixaService;
 import exception.SaldoInsuficienteException;
 import java.util.*;
@@ -34,14 +31,14 @@ public class VendaController
         boolean usouDinheiro = false;
         try {
             if (venda.getFormaPagamento() == FormaPagamento.SALDO) {
-                saldoAnterior = UsuarioService.getSaldoUsuario(venda.getCpfUsuario());
+                saldoAnterior = UsuarioService.consultarSaldoMembro(venda.getCpfUsuario());
                 usouSaldo = true;
             }
 
             atualizarEstoqueParaVenda(venda);
 
             if (venda.getFormaPagamento().name().contains("SALDO")) {
-                UsuarioService.subtraiSaldoUsuario(venda.getCpfUsuario(), venda.getValorTotal());
+                UsuarioService.alterarSaldoMembro(venda.getCpfUsuario(), -venda.getValorTotal());
             }
 
             switch (venda.getFormaPagamento()) {
@@ -88,16 +85,30 @@ public class VendaController
         });
     }
 
+    public static List<Venda> obterVendas() {
+        return VendaService.obterVendas();
+    }
+
+    /**
+     * Retorna o mapa de produtos (id -> quantidade) de uma venda.
+     * @param venda Venda a ser consultada
+     * @return Mapa de produtos e quantidades
+     */
+    public static Map<String, Integer> getProdutos(Venda venda) {
+        if (venda == null) return Collections.emptyMap();
+        return venda.getItens();
+    }
+    
     private static void rollbackVenda(Venda venda, Map<String, Integer> estoqueAnterior, double saldoAnterior, boolean usouSaldo, boolean usouDinheiro) {
         estoqueAnterior.forEach((idProduto, quantidadeAnterior) -> {
             EstoqueService.atualizarQuantidade(idProduto, quantidadeAnterior);
         });
         if (usouSaldo) {
             try {
-                double saldoAtual = UsuarioService.getSaldoUsuario(venda.getCpfUsuario());
+                double saldoAtual = UsuarioService.consultarSaldoMembro(venda.getCpfUsuario());
                 double diff = saldoAnterior - saldoAtual;
                 if (diff > 0) {
-                    UsuarioService.adicionarSaldoUsuario(venda.getCpfUsuario(), diff);
+                    UsuarioService.alterarSaldoMembro(venda.getCpfUsuario(), diff);
                 }
             } catch (Exception ex) {
                 System.err.println("Erro ao restaurar saldo: " + ex.getMessage());

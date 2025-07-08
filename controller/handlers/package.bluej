@@ -72,5 +72,5 @@ target8.name=RemoverItemHandler
 target8.showInterface=false
 target8.type=ClassTarget
 target8.width=160
-target8.x=80
-target8.y=0
+target8.x=190
+target8.y=20

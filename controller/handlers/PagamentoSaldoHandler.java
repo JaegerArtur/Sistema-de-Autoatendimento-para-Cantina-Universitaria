@@ -36,12 +36,16 @@ public class PagamentoSaldoHandler implements ActionListener {
                     String cpf = membro.getCpf();
                     String dataHora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
                     Venda venda = new Venda(cpf, dataHora, new LinkedHashMap<>(carrinho), FormaPagamento.SALDO);
-                    PagamentoController.realizarPagamentoSaldo(venda);
+                    boolean sucesso = controller.VendaController.processarVenda(venda, 0);
                     saldoLabel.setText("Saldo atual: R$ " + String.format("%.2f", membro.getSaldo()));
-                    JOptionPane.showMessageDialog(parent, "Pagamento com saldo realizado com sucesso!", "Pagamento", JOptionPane.INFORMATION_MESSAGE);
-                    carrinho.clear();
-                    parent.dispose();
-                    new view.TelaLogin();
+                    if (sucesso) {
+                        JOptionPane.showMessageDialog(parent, "Pagamento com saldo realizado com sucesso!", "Pagamento", JOptionPane.INFORMATION_MESSAGE);
+                        carrinho.clear();
+                        parent.dispose();
+                        new view.TelaLogin();
+                    } else {
+                        JOptionPane.showMessageDialog(parent, "Erro ao processar pagamento.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(parent, "Saldo insuficiente!", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
