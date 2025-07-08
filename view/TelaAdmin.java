@@ -33,16 +33,20 @@ public class TelaAdmin extends JFrame {
         titulo.setFont(new Font("Arial", Font.BOLD, 36));
         add(titulo, BorderLayout.NORTH);
 
-        JPanel botoes = new JPanel(new GridLayout(2, 3, 40, 40));
-        String[] opcoes = {"Relatórios", "Produtos", "Usuários", "Estoque", "Caixa", "Sair"};
+        JPanel botoes = new JPanel(new GridLayout(3, 3, 40, 40));
+        String[] opcoes = {"Relatórios", "Produtos", "Usuários", "Estoque", "Caixa", "Histórico de Vendas", "", "", "Sair"};
         for (String opcao : opcoes) {
             JButton btn = new JButton(opcao);
-            btn.setFont(new Font("Arial", Font.BOLD, 38)); // fonte maior
-            btn.setBackground(new Color(255, 230, 0));
-            btn.setFocusPainted(false);
-            btn.setPreferredSize(new Dimension(260, 140)); // aumenta tamanho do botão
-            btn.setMargin(new Insets(30, 30, 30, 30)); // padding maior
-            btn.addActionListener(e -> handleOpcao(opcao));
+            if (opcao.isEmpty()) {
+                btn.setVisible(false); // Oculta botões vazios
+            } else {
+                btn.setFont(new Font("Arial", Font.BOLD, 38)); // fonte maior
+                btn.setBackground(new Color(255, 230, 0));
+                btn.setFocusPainted(false);
+                btn.setPreferredSize(new Dimension(260, 140)); // aumenta tamanho do botão
+                btn.setMargin(new Insets(30, 30, 30, 30)); // padding maior
+                btn.addActionListener(e -> handleOpcao(opcao));
+            }
             botoes.add(btn);
         }
         botoes.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
@@ -67,6 +71,9 @@ public class TelaAdmin extends JFrame {
                 break;
             case "Caixa":
                 mostrarCaixa();
+                break;
+            case "Histórico de Vendas":
+                mostrarHistoricoVendas();
                 break;
             case "Sair":
                 dispose();
@@ -206,7 +213,12 @@ public class TelaAdmin extends JFrame {
         }
         resetPopupFontSize();
     }
-        // Métodos utilitários para aumentar o tamanho dos popups
+
+    private void mostrarHistoricoVendas() {
+        new view.TelaHistoricoVendas(this);
+    }
+
+    // Métodos utilitários para aumentar o tamanho dos popups
     private void setPopupFontSize(int size) {
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, size));
         UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, size));
