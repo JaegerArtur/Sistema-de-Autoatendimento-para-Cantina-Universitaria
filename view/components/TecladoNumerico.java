@@ -1,11 +1,24 @@
+/**
+ * Componente de interface gráfica que representa um teclado numérico virtual.
+ * @author Grupo Artur, João Lucas e Miguel
+ * @version 1.0
+
+ */
 package view.components;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TecladoNumerico extends JDialog {
+    /** Valor digitado pelo usuário, ou null se cancelou. */
     private String valorDigitado = null;
 
+    /**
+     * Constrói um novo teclado numérico modal.
+     * @param parent a janela pai deste diálogo
+     * @param mensagem a mensagem a ser exibida no título da janela
+     * @param valorInicial o valor inicial a ser exibido no campo de texto
+     */
     public TecladoNumerico(JFrame parent, String mensagem, String valorInicial) {
         super(parent, mensagem, true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -56,6 +69,14 @@ public class TecladoNumerico extends JDialog {
         add(botoes, BorderLayout.SOUTH);
     }
 
+    /**
+     * Método estático utilitário para exibir o teclado numérico e obter entrada do usuário.
+     * <p>
+     * @param parent a janela pai do diálogo
+     * @param mensagem a mensagem a ser exibida no título
+     * @param valorInicial o valor inicial a ser exibido
+     * @return o valor digitado pelo usuário, ou null se cancelou/vazio
+     */
     public static String mostrar(JFrame parent, String mensagem, String valorInicial) {
         TecladoNumerico dialog = new TecladoNumerico(parent, mensagem, valorInicial);
         dialog.setVisible(true);

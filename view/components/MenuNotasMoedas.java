@@ -1,3 +1,9 @@
+/**
+ * Componente de interface gráfica para entrada de notas e moedas em pagamentos.
+ * @author Grupo Artur, João Lucas e Miguel
+ * @version 1.0
+
+ */
 package view.components;
 
 import javax.swing.*;
@@ -7,13 +13,26 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MenuNotasMoedas extends JDialog {
+    /** Mapa com o resultado final */
     private final Map<Double, Integer> resultado = new LinkedHashMap<>();
+    
+    /** Valor total entregue pelo usuário.*/
     private double totalEntregue = 0.0;
+    
+    /** Label que exibe o total entregue.*/
     private final JLabel totalLabel;
+    
+    /** Flag que indica se o usuário confirmou a entrada ou cancelou. */
     private boolean confirmado = false;
 
+    /** Array com todas as denominações disponíveis, das maiores para as menores. */
     private static final double[] DENOMINACOES = {100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.10, 0.05};
 
+    /**
+     * Constrói um novo menu de notas e moedas.
+     * @param parent a janela pai deste diálogo
+     * @param totalAPagar o valor total que precisa ser pago
+     */
     public MenuNotasMoedas(JFrame parent, double totalAPagar) {
         super(parent, "Informe as notas/moedas entregues", true);
         setLayout(new BorderLayout(10, 5));
@@ -106,6 +125,10 @@ public class MenuNotasMoedas extends JDialog {
         add(painelBotoes, BorderLayout.SOUTH);
     }
 
+    /**
+     * Atualiza o total entregue baseado nas quantidades informadas nos campos.
+     * @param campos mapa dos campos de texto com as quantidades por denominação
+     */
     private void atualizarTotal(Map<Double, JTextField> campos) {
         totalEntregue = 0.0;
         for (Map.Entry<Double, JTextField> entry : campos.entrySet()) {
@@ -117,6 +140,12 @@ public class MenuNotasMoedas extends JDialog {
         totalLabel.setText("Total entregue: R$ " + String.format("%.2f", totalEntregue).replace('.', ','));
     }
 
+    /**
+     * Método estático utilitário para exibir o menu e obter entrada do usuário.
+     * @param parent a janela pai do diálogo
+     * @param totalAPagar o valor total que precisa ser pago
+     * @return mapa de denominação → quantidade, ou null se cancelou
+     */
     public static Map<Double, Integer> mostrar(JFrame parent, double totalAPagar) {
         MenuNotasMoedas dialog = new MenuNotasMoedas(parent, totalAPagar);
         dialog.setVisible(true);

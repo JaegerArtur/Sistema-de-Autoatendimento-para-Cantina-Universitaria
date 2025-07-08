@@ -1,3 +1,9 @@
+/**
+ * Componente de interface gráfica que representa um teclado virtual alfanumérico.
+ * @author Grupo Artur, João Lucas e Miguel
+ * @version 1.0
+
+ */
 package view.components;
 
 import javax.swing.*;
@@ -5,8 +11,12 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class TecladoVirtual extends JPanel {
+    /** Campo de texto que está atualmente focado e receberá a entrada do teclado. */
     private JTextField campoFocado;
 
+    /**
+     * Constrói um novo teclado virtual.
+     */
     public TecladoVirtual() {
         setLayout(new GridLayout(4, 10, 5, 5));
         setBorder(BorderFactory.createEmptyBorder(10, 60, 10, 60));
@@ -43,10 +53,18 @@ public class TecladoVirtual extends JPanel {
         add(enter);
     }
 
+    /**
+     * Define qual campo de texto receberá a entrada do teclado virtual.
+     * @param campo o campo de texto que receberá a entrada do teclado
+     */
     public void setCampoFocado(JTextField campo) {
         this.campoFocado = campo;
     }
 
+    /**
+     * Insere texto no campo de texto focado na posição atual do cursor.
+     * @param texto o texto a ser inserido no campo focado
+     */
     private void inserirNoCampoFocado(String texto) {
         if (campoFocado != null) {
             int pos = campoFocado.getCaretPosition();
@@ -58,6 +76,9 @@ public class TecladoVirtual extends JPanel {
         }
     }
 
+    /**
+     * Remove um caractere antes da posição atual do cursor no campo focado.
+     */
     private void apagarNoCampoFocado() {
         if (campoFocado != null) {
             int pos = campoFocado.getCaretPosition();
