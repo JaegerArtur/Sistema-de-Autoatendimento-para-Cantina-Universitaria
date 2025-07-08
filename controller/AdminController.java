@@ -71,6 +71,7 @@ public class AdminController {
      * @return Quantidade de vendas.
      */
     public static int getNumeroVendas() {
+        VendaController.carregarVendas();
         return VendaService.obterVendas().size();
     }
 
@@ -81,6 +82,7 @@ public class AdminController {
      * @return Lista de vendas no período.
      */
     public static List<model.Venda> relatorioVendasPorPeriodo(String dataInicio, String dataFim) {
+        VendaController.carregarVendas();
         return VendaService.buscarVendasPorPeriodo(dataInicio, dataFim);
     }
 
@@ -90,6 +92,7 @@ public class AdminController {
      * @return Lista dos produtos mais vendidos.
      */
     public static List<Produto> relatorioProdutosMaisVendidos(int topN) {
+        VendaController.carregarVendas();
         List<model.Venda> vendas = VendaController.obterVendas();
         Map<String, Integer> contagem = new java.util.HashMap<>();
         for (model.Venda v : vendas) {
@@ -100,14 +103,13 @@ public class AdminController {
         List<Map.Entry<String, Integer>> lista = new java.util.ArrayList<>(contagem.entrySet());
         lista.sort((a, b) -> b.getValue() - a.getValue());
         List<Produto> resultado = new java.util.ArrayList<>();
-        List<Produto> todos = listarProdutos();
         for (int i = 0; i < Math.min(topN, lista.size()); i++) {
-            String nome = lista.get(i).getKey();
-            for (Produto p : todos) {
-                if (p.getNome().equals(nome)) {
-                    resultado.add(p);
-                    break;
-                }
+            String id = lista.get(i).getKey();
+            try {
+                Produto p = ProdutoController.buscarProdutoPorId(id);
+                resultado.add(p);
+            } catch (exception.ProdutoNaoExisteException e) {
+                // ignora produtos inexistentes
             }
         }
         return resultado;
@@ -115,10 +117,11 @@ public class AdminController {
 
     /**
      * Gera relatório dos horários de maior movimento (top 3 faixas horárias com mais vendas).
-     * Agrupa por hora (ex: 10:00-10:59).
      * @return String com as faixas horárias e quantidade de vendas.
      */
     public static String relatorioHorariosMovimento() {
+        // Garante que as vendas estejam atualizadas antes de gerar o relatório
+        VendaController.carregarVendas();
         List<model.Venda> vendas = VendaController.obterVendas();
         java.util.Map<Integer, Integer> contagemPorHora = new java.util.HashMap<>();
         java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -178,6 +181,7 @@ public class AdminController {
      * @return String com resumo das principais informações.
      */
     public static String relatorioResumoGeral() {
+        VendaController.carregarVendas();
         StringBuilder sb = new StringBuilder();
         sb.append("Resumo Geral:\n");
         sb.append("Total de vendas: ").append(getNumeroVendas()).append("\n");

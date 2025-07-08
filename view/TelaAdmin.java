@@ -76,6 +76,10 @@ public class TelaAdmin extends JFrame {
     }
 
     private void mostrarRelatorios() {
+        // Garante que produtos e estoque estejam carregados antes dos relatórios
+        controller.ProdutoController.carregarProdutos();
+        controller.EstoqueController.carregarEstoque();
+
         StringBuilder sb = new StringBuilder();
         sb.append(controller.AdminController.relatorioResumoGeral()).append("\n");
         sb.append("\n--- Caixa Detalhado ---\n");

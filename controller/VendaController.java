@@ -37,9 +37,11 @@ public class VendaController
 
             atualizarEstoqueParaVenda(venda);
 
-            if (venda.getFormaPagamento().name().contains("SALDO")) {
-                UsuarioService.alterarSaldoMembro(venda.getCpfUsuario(), -venda.getValorTotal());
-            }
+            // Corrigido: Remover desconto duplicado do saldo
+            // O desconto do saldo já é feito em PagamentoService.pagarComSaldo
+            //if (venda.getFormaPagamento().name().contains("SALDO")) {
+            //    UsuarioService.alterarSaldoMembro(venda.getCpfUsuario(), -venda.getValorTotal());
+            //}
 
             switch (venda.getFormaPagamento()) {
                 case DINHEIRO:
@@ -69,6 +71,12 @@ public class VendaController
             rollbackVenda(venda, estoqueAnterior, saldoAnterior, usouSaldo, usouDinheiro);
             return false;
         }
+    }
+    /**
+     * Carrega as vendas do arquivo para garantir dados atualizados.
+     */
+    public static void carregarVendas() {
+        service.VendaService.carregarVendas();
     }
 
     private static Map<String, Integer> salvarEstoqueAnterior(Venda venda) {

@@ -72,7 +72,6 @@ public class TelaLogin extends JFrame {
         painelFormulario.setLayout(new GridBagLayout());
         painelFormulario.setBackground(new Color(0xEFF1ED));
 
-        // Teclado virtual (componente externo)
         tecladoVirtual = new TecladoVirtual();
 
         TipoUsuarioHandler handler = new TipoUsuarioHandler(this, btnMembro, btnVisitante, btnAdmin, loginController, painelFormulario) {
