@@ -141,43 +141,7 @@ public class TelaAdmin extends JFrame {
     }
 
     private void mostrarEstoque() {
-        controller.ProdutoController.carregarProdutos();
-        Map<String, Integer> estoque = controller.AdminController.getEstoque();
-        List<String> nomes = new java.util.ArrayList<>();
-        List<String> ids = new java.util.ArrayList<>();
-        StringBuilder sb = new StringBuilder("Estoque atual:\n");
-        for (Map.Entry<String, Integer> entry : estoque.entrySet()) {
-            try {
-                model.Produto p = controller.ProdutoController.buscarProdutoPorId(entry.getKey());
-                sb.append("- ").append(p.getNome()).append(" | Quantidade: ")
-                  .append(entry.getValue()).append("\n");
-                nomes.add(p.getNome() + " (Atual: " + entry.getValue() + ")");
-                ids.add(entry.getKey());
-            } catch (Exception e) {
-                // ignora produtos inexistentes
-            }
-        }
-        setPopupFontSize(28);
-        int opt = JOptionPane.showOptionDialog(this, sb.toString() + "\nDeseja editar o estoque?", "Estoque", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{"Editar Estoque", "Fechar"}, "Fechar");
-        if (opt == 0 && !nomes.isEmpty()) {
-            String prod = (String) JOptionPane.showInputDialog(this, "Selecione o produto:", "Editar Estoque", JOptionPane.PLAIN_MESSAGE, null, nomes.toArray(), nomes.get(0));
-            if (prod != null) {
-                int idx = nomes.indexOf(prod);
-                String id = ids.get(idx);
-                String qtdStr = null;
-                qtdStr = mostrarTecladoNumerico("Nova quantidade para " + prod + ":", estoque.get(id).toString());
-                if (qtdStr != null) {
-                    try {
-                        int novaQtd = Integer.parseInt(qtdStr.replace(",", ""));
-                        controller.EstoqueController.atualizarQuantidade(id, novaQtd);
-                        JOptionPane.showMessageDialog(this, "Quantidade atualizada com sucesso!", "Estoque", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        }
-        resetPopupFontSize();
+        new view.TelaVisualizarEstoque(this);
     }
 
     private void mostrarCaixa() {
