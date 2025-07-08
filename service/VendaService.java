@@ -108,13 +108,13 @@ public class VendaService
     }
 
     /**
-     * Busca vendas realizadas em um período (datas no formato yyyy-MM-ddTHH:mm:ss).
+     * Busca vendas realizadas em um período (datas no formato dd/MM/yyyy HH:mm:ss).
      * @param dataInicio Data/hora inicial
      * @param dataFim Data/hora final
      * @return Lista de vendas no período
      */
     public static List<Venda> buscarVendasPorPeriodo(String dataInicio, String dataFim) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime inicio = LocalDateTime.parse(dataInicio, formatter);
         LocalDateTime fim = LocalDateTime.parse(dataFim, formatter);
         return vendas.stream()

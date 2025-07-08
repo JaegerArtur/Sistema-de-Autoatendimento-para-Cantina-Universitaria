@@ -1,6 +1,6 @@
 
 /**
- * Tela administrativa do sistema, permitindo acesso a relatórios, estoque, produtos,
+ * Tela administrativa do sistema, permitindo acesso a relatórios, estoque
  * usuários e caixa da cantina universitária.
  *
  * @author Grupo Artur, João Lucas e Miguel
@@ -34,7 +34,7 @@ public class TelaAdmin extends JFrame {
         add(titulo, BorderLayout.NORTH);
 
         JPanel botoes = new JPanel(new GridLayout(3, 3, 40, 40));
-        String[] opcoes = {"Relatórios", "Produtos", "Usuários", "Estoque", "Caixa", "Histórico de Vendas", "Repor Estoque", "", "Sair"};
+        String[] opcoes = {"Relatórios", "Usuários", "Estoque", "Caixa", "Histórico de Vendas", "Repor Estoque", "", "Sair"};
         for (String opcao : opcoes) {
             JButton btn = new JButton(opcao);
             if (opcao.isEmpty()) {
@@ -59,9 +59,6 @@ public class TelaAdmin extends JFrame {
         switch (opcao) {
             case "Relatórios":
                 mostrarRelatorios();
-                break;
-            case "Produtos":
-                mostrarProdutos();
                 break;
             case "Usuários":
                 mostrarUsuarios();
@@ -118,18 +115,6 @@ public class TelaAdmin extends JFrame {
         resetPopupFontSize();
     }
 
-    private void mostrarProdutos() {
-        List<model.Produto> produtos = controller.AdminController.listarProdutos();
-        StringBuilder sb = new StringBuilder("Produtos cadastrados:\n");
-        for (model.Produto p : produtos) {
-            sb.append("- ").append(p.getNome()).append(" | Preço: R$ ")
-              .append(String.format("%.2f", p.getPreco()).replace('.', ','))
-              .append("\n");
-        }
-        setPopupFontSize(28);
-        JOptionPane.showMessageDialog(this, sb.toString(), "Produtos", JOptionPane.INFORMATION_MESSAGE);
-        resetPopupFontSize();
-    }
 
     private void mostrarUsuarios() {
         List<model.Usuario> usuarios = controller.AdminController.listarUsuarios();

@@ -77,8 +77,8 @@ public class AdminController {
 
     /**
      * Gera relatório de vendas realizadas em um período.
-     * @param dataInicio Data/hora inicial (formato yyyy-MM-dd'T'HH:mm:ss)
-     * @param dataFim Data/hora final (formato yyyy-MM-dd'T'HH:mm:ss)
+     * @param dataInicio Data/hora inicial (formato dd/MM/yyyy HH:mm:ss)
+     * @param dataFim Data/hora final (formato dd/MM/yyyy HH:mm:ss)
      * @return Lista de vendas no período.
      */
     public static List<model.Venda> relatorioVendasPorPeriodo(String dataInicio, String dataFim) {
@@ -124,7 +124,7 @@ public class AdminController {
         VendaController.carregarVendas();
         List<model.Venda> vendas = VendaController.obterVendas();
         java.util.Map<Integer, Integer> contagemPorHora = new java.util.HashMap<>();
-        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         for (model.Venda v : vendas) {
             try {
                 String dataHora = v.getDataHoraVenda();
