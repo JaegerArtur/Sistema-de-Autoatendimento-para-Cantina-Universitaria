@@ -92,6 +92,18 @@ public class ProdutoService {
     }
 
     /**
+     * Atualiza o preço de um produto específico.
+     * @param idProduto ID do produto a ser atualizado
+     * @param novoPreco Novo preço do produto
+     * @throws ProdutoNaoExisteException se o produto não existir
+     */
+    public static void atualizarPreco(String idProduto, double novoPreco) throws ProdutoNaoExisteException {
+        Produto produto = getProdutoId(idProduto);
+        produto.setPreco(novoPreco);
+        salvarProdutos();
+    }
+
+    /**
      * Salva a lista atual de produtos no arquivo JSON.
      */
     public static void salvarProdutos() {

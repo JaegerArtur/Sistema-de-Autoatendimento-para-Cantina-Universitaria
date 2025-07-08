@@ -87,4 +87,12 @@ public class Produto
     public void setDataValidade(String novaDataValidade) {
         this.dataValidade = novaDataValidade;
     }
+
+    /**
+     * Define um novo preço para o produto.
+     * @param novoPreco Novo preço do produto.
+     */
+    public void setPreco(double novoPreco) {
+        this.preco = novoPreco;
+    }
 }

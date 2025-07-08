@@ -40,4 +40,14 @@ public class ProdutoController {
     public static void atualizarDataValidade(String idProduto, String novaDataValidade) throws ProdutoNaoExisteException {
         ProdutoService.atualizarDataValidade(idProduto, novaDataValidade);
     }
+
+    /**
+     * Atualiza o preço de um produto.
+     * @param idProduto ID do produto a ser atualizado
+     * @param novoPreco Novo preço do produto
+     * @throws ProdutoNaoExisteException se o produto não existir
+     */
+    public static void atualizarPreco(String idProduto, double novoPreco) throws ProdutoNaoExisteException {
+        ProdutoService.atualizarPreco(idProduto, novoPreco);
+    }
 }

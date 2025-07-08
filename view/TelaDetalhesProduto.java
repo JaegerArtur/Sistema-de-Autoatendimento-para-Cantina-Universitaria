@@ -8,6 +8,8 @@ import java.time.temporal.ChronoUnit;
 import controller.EstoqueController;
 import controller.ProdutoController;
 import model.Produto;
+import exception.ProdutoNaoExisteException;
+import view.components.TecladoNumerico;
 
 /**
  * Tela para exibir detalhes individuais de um produto específico.
@@ -81,6 +83,13 @@ public class TelaDetalhesProduto extends JDialog {
         // Painel de botões
         JPanel painelBotoes = new JPanel(new FlowLayout());
         
+        JButton btnEditarPreco = new JButton("Editar Preço");
+        btnEditarPreco.setFont(new Font("Arial", Font.BOLD, 16));
+        btnEditarPreco.setBackground(new Color(70, 130, 180));
+        btnEditarPreco.setForeground(Color.WHITE);
+        btnEditarPreco.setPreferredSize(new Dimension(140, 40));
+        btnEditarPreco.addActionListener(e -> abrirDialogEditarPreco());
+        
         JButton btnFechar = new JButton("Fechar");
         btnFechar.setFont(new Font("Arial", Font.BOLD, 16));
         btnFechar.setBackground(new Color(255, 100, 100));
@@ -88,6 +97,7 @@ public class TelaDetalhesProduto extends JDialog {
         btnFechar.setPreferredSize(new Dimension(120, 40));
         btnFechar.addActionListener(e -> dispose());
 
+        painelBotoes.add(btnEditarPreco);
         painelBotoes.add(btnFechar);
         painelBotoes.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         
@@ -255,5 +265,126 @@ public class TelaDetalhesProduto extends JDialog {
         } else {
             return Color.BLACK;
         }
+    }
+
+    /**
+     * Abre um dialog para editar o preço do produto usando o teclado numérico.
+     */
+    private void abrirDialogEditarPreco() {
+        // Mostra informação do preço atual
+        String precoAtual = String.format("%.2f", produto.getPreco()).replace('.', ',');
+        int confirmacao = JOptionPane.showConfirmDialog(
+            this,
+            "Produto: " + produto.getNome() + "\n" +
+            "Preço atual: R$ " + precoAtual + "\n\n" +
+            "Deseja alterar o preço?",
+            "Editar Preço do Produto",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+        
+        if (confirmacao != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+        // Obtém o JFrame parent (necessário para o TecladoNumerico)
+        JFrame frameParent = getFrameParent();
+        
+        // Abre o teclado numérico
+        String novoPrecoTexto = TecladoNumerico.mostrar(
+            frameParent, 
+            "Digite o novo preço para: " + produto.getNome(), 
+            precoAtual
+        );
+        
+        // Se o usuário cancelou ou não digitou nada
+        if (novoPrecoTexto == null || novoPrecoTexto.trim().isEmpty()) {
+            return;
+        }
+        
+        try {
+            // Converte o texto para double (substituindo vírgula por ponto)
+            String textoPreco = novoPrecoTexto.trim().replace(',', '.');
+            double novoPreco = Double.parseDouble(textoPreco);
+            
+            if (novoPreco < 0) {
+                JOptionPane.showMessageDialog(this, 
+                    "O preço não pode ser negativo!", 
+                    "Erro", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (novoPreco == produto.getPreco()) {
+                JOptionPane.showMessageDialog(this, 
+                    "O preço informado é igual ao preço atual!", 
+                    "Aviso", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            // Atualiza o preço do produto
+            ProdutoController.atualizarPreco(idProduto, novoPreco);
+            
+            // Recarrega os dados do produto
+            carregarDadosProduto();
+            
+            // Atualiza a tela
+            atualizarInterface();
+            
+            JOptionPane.showMessageDialog(this, 
+                "Preço atualizado com sucesso!\n" +
+                "Preço anterior: R$ " + precoAtual + "\n" +
+                "Novo preço: R$ " + String.format("%.2f", novoPreco).replace('.', ','), 
+                "Sucesso", 
+                JOptionPane.INFORMATION_MESSAGE);
+                
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Por favor, insira um valor numérico válido!\n" +
+                "Valor informado: " + novoPrecoTexto, 
+                "Erro", 
+                JOptionPane.ERROR_MESSAGE);
+        } catch (ProdutoNaoExisteException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Erro: Produto não encontrado!", 
+                "Erro", 
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao atualizar o preço: " + e.getMessage(), 
+                "Erro", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Obtém o JFrame parent necessário para o TecladoNumerico.
+     */
+    private JFrame getFrameParent() {
+        Window owner = getOwner();
+        while (owner != null && !(owner instanceof JFrame)) {
+            if (owner instanceof Dialog) {
+                owner = ((Dialog) owner).getOwner();
+            } else {
+                break;
+            }
+        }
+        return (JFrame) owner;
+    }
+
+    /**
+     * Atualiza a interface após mudanças nos dados.
+     */
+    private void atualizarInterface() {
+        // Remove todos os componentes
+        getContentPane().removeAll();
+        
+        // Recria a interface
+        initializeComponents();
+        
+        // Atualiza a tela
+        revalidate();
+        repaint();
     }
 } 
