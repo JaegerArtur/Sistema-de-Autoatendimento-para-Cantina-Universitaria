@@ -78,4 +78,25 @@ public class ProdutoService {
                 .filter(p -> p.getCategoria() == categoria)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Atualiza a data de validade de um produto específico.
+     * @param idProduto ID do produto a ser atualizado
+     * @param novaDataValidade Nova data de validade no formato "yyyy-MM-dd"
+     * @throws ProdutoNaoExisteException se o produto não existir
+     */
+    public static void atualizarDataValidade(String idProduto, String novaDataValidade) throws ProdutoNaoExisteException {
+        Produto produto = getProdutoId(idProduto);
+        produto.setDataValidade(novaDataValidade);
+        salvarProdutos();
+    }
+
+    /**
+     * Salva a lista atual de produtos no arquivo JSON.
+     */
+    public static void salvarProdutos() {
+        if (produtos != null) {
+            JsonManager.salvarProdutos(produtos, CAMINHO_PRODUTOS);
+        }
+    }
 }

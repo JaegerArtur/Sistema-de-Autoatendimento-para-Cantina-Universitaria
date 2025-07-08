@@ -79,4 +79,12 @@ public class Produto
     public CategoriaProduto getCategoria() {
         return this.categoria;
     }
+
+    /**
+     * Define uma nova data de validade para o produto.
+     * @param novaDataValidade Nova data de validade no formato "yyyy-MM-dd".
+     */
+    public void setDataValidade(String novaDataValidade) {
+        this.dataValidade = novaDataValidade;
+    }
 }

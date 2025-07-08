@@ -34,7 +34,7 @@ public class TelaAdmin extends JFrame {
         add(titulo, BorderLayout.NORTH);
 
         JPanel botoes = new JPanel(new GridLayout(3, 3, 40, 40));
-        String[] opcoes = {"Relatórios", "Produtos", "Usuários", "Estoque", "Caixa", "Histórico de Vendas", "", "", "Sair"};
+        String[] opcoes = {"Relatórios", "Produtos", "Usuários", "Estoque", "Caixa", "Histórico de Vendas", "Repor Estoque", "", "Sair"};
         for (String opcao : opcoes) {
             JButton btn = new JButton(opcao);
             if (opcao.isEmpty()) {
@@ -74,6 +74,9 @@ public class TelaAdmin extends JFrame {
                 break;
             case "Histórico de Vendas":
                 mostrarHistoricoVendas();
+                break;
+            case "Repor Estoque":
+                mostrarReposicaoEstoque();
                 break;
             case "Sair":
                 dispose();
@@ -180,6 +183,10 @@ public class TelaAdmin extends JFrame {
 
     private void mostrarHistoricoVendas() {
         new view.TelaHistoricoVendas(this);
+    }
+
+    private void mostrarReposicaoEstoque() {
+        new view.TelaReposicaoEstoque(this);
     }
 
     // Métodos utilitários para aumentar o tamanho dos popups

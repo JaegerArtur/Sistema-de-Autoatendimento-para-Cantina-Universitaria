@@ -30,4 +30,14 @@ public class ProdutoController {
     public static Produto buscarProdutoPorId(String id) throws ProdutoNaoExisteException {
         return ProdutoService.getProdutoId(id);
     }
+
+    /**
+     * Atualiza a data de validade de um produto.
+     * @param idProduto ID do produto a ser atualizado
+     * @param novaDataValidade Nova data de validade no formato "yyyy-MM-dd"
+     * @throws ProdutoNaoExisteException se o produto não existir
+     */
+    public static void atualizarDataValidade(String idProduto, String novaDataValidade) throws ProdutoNaoExisteException {
+        ProdutoService.atualizarDataValidade(idProduto, novaDataValidade);
+    }
 }
