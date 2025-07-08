@@ -18,7 +18,7 @@ public class VendaController
 {
     /**
      * Orquestra o processo completo de venda.<p>
-     * Valida, desconta estoque, saldo, atualiza caixa e registra a venda.<br>
+     * Valida, desconta estoque, saldo, atualiza caixa e registra a venda.
      * Lança exceções específicas em caso de erro.
      * @param venda A venda a ser processada
      * @param valorDinheiro Valor em dinheiro entregue pelo cliente (se aplicável)
@@ -37,17 +37,12 @@ public class VendaController
 
             atualizarEstoqueParaVenda(venda);
 
-            // Corrigido: Remover desconto duplicado do saldo
-            // O desconto do saldo já é feito em PagamentoService.pagarComSaldo
-            //if (venda.getFormaPagamento().name().contains("SALDO")) {
-            //    UsuarioService.alterarSaldoMembro(venda.getCpfUsuario(), -venda.getValorTotal());
-            //}
+
 
             switch (venda.getFormaPagamento()) {
                 case DINHEIRO:
                     usouDinheiro = true;
                     double trocoDinheiro = PagamentoService.pagarComDinheiro(venda, valorDinheiro);
-                    CaixaService.adicionarCaixa(venda.getValorTotal() - trocoDinheiro);
                     break;
                 case SALDO:
                     PagamentoService.pagarComSaldo(venda);
@@ -55,7 +50,7 @@ public class VendaController
                 case DINHEIRO_E_SALDO:
                     usouDinheiro = true;
                     double trocoSaldoDinheiro = PagamentoService.pagarComSaldoEDinheiro(venda, valorDinheiro);
-                    CaixaService.adicionarCaixa(venda.getValorTotal() - trocoSaldoDinheiro);
+
                     break;
             }
 
