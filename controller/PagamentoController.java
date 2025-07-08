@@ -10,13 +10,8 @@ import java.util.Map;
 
 /**
  * Controller responsável por orquestrar operações de pagamento e caixa.
- * Atua como fachada entre a interface e os serviços.
- *
- * Boas práticas aplicadas:
- * - JavaDocs em métodos públicos
- * - Nomes claros e padronizados
- * - Delegação de responsabilidades
- */
+ * 
+ * */
 public class PagamentoController {
 
     /**

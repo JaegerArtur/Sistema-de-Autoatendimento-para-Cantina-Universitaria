@@ -42,9 +42,9 @@ public class TelaLogin extends JFrame {
        
         Container container = getContentPane();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1170, 660);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         setResizable(false);
-        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         JPanel painelImagem = new JPanel();

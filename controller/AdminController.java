@@ -1,10 +1,26 @@
 
 /**
- * Controller responsável pelas operações administrativas do sistema,
- * como relatórios, listagem de usuários/produtos, consulta de estoque e caixa.
+ * {@code AdminController} centraliza as operações administrativas do sistema de autoatendimento,
+ * fornecendo métodos estáticos para geração de relatórios, consulta e listagem de usuários,
+ * produtos, estoque e caixa. Permite ao administrador obter informações gerenciais essenciais,
+ * como vendas por período, produtos mais vendidos, horários de maior movimento, estoque baixo,
+ * caixa detalhado, resumo geral e produtos vencidos ou próximos do vencimento.
+ * <p>
+ * Todos os métodos são utilitários e estáticos, facilitando o acesso a dados consolidados para
+ * exibição em telas administrativas e geração de relatórios.
+ * <p>
+ *
+ * <ul>
+ *   <li>Listagem de usuários e produtos</li>
+ *   <li>Consulta de estoque e valor em caixa</li>
+ *   <li>Relatórios de vendas por período, produtos mais vendidos, horários de maior movimento</li>
+ *   <li>Relatórios de estoque baixo, caixa detalhado, produtos vencidos/próximos do vencimento</li>
+ *   <li>Resumo geral do sistema</li>
+ * </ul>
  *
  * @author Grupo Artur, João Lucas e Miguel
  * @version 1.0
+ *
  */
 package controller;
 
@@ -17,36 +33,61 @@ import java.util.*;
 
 import controller.*;
 public class AdminController {
+
+    /**
+     * Lista todos os usuários cadastrados no sistema.
+     * @return Lista de usuários.
+     */
     public static List<Usuario> listarUsuarios() {
         return UsuarioService.usuarios;
     }
 
+    /**
+     * Lista todos os produtos cadastrados no sistema.
+     * @return Lista de produtos.
+     */
     public static List<Produto> listarProdutos() {
         return ProdutoController.listarProdutos();
     }
 
+    /**
+     * Retorna o mapa de produtos e quantidades do estoque.
+     * @return Mapa de id do produto para quantidade disponível.
+     */
     public static Map<String, Integer> getEstoque() {
         return EstoqueController.getMapaProdutos();
     }
 
+    /**
+     * Retorna o valor total disponível no caixa.
+     * @return Valor total em reais.
+     */
     public static double getValorCaixa() {
         return CaixaService.getValorTotalCaixa();
     }
 
+    /**
+     * Retorna o número total de vendas realizadas.
+     * @return Quantidade de vendas.
+     */
     public static int getNumeroVendas() {
         return VendaService.obterVendas().size();
     }
 
     /**
-     * Relatório de vendas em um período (por data inicial e final).
-     * Usa datas no formato yyyy-MM-dd'T'HH:mm:ss
+     * Gera relatório de vendas realizadas em um período.
+     * @param dataInicio Data/hora inicial (formato yyyy-MM-dd'T'HH:mm:ss)
+     * @param dataFim Data/hora final (formato yyyy-MM-dd'T'HH:mm:ss)
+     * @return Lista de vendas no período.
      */
     public static List<model.Venda> relatorioVendasPorPeriodo(String dataInicio, String dataFim) {
         return VendaService.buscarVendasPorPeriodo(dataInicio, dataFim);
     }
 
     /**
-     * Relatório de produtos mais vendidos (top N).
+     * Gera relatório dos produtos mais vendidos (top N).
+     * @param topN Quantidade de produtos a retornar.
+     * @return Lista dos produtos mais vendidos.
      */
     public static List<Produto> relatorioProdutosMaisVendidos(int topN) {
         List<model.Venda> vendas = VendaController.obterVendas();
@@ -73,8 +114,9 @@ public class AdminController {
     }
 
     /**
-     * Relatório dos horários de maior movimento (top 3 faixas horárias com mais vendas).
+     * Gera relatório dos horários de maior movimento (top 3 faixas horárias com mais vendas).
      * Agrupa por hora (ex: 10:00-10:59).
+     * @return String com as faixas horárias e quantidade de vendas.
      */
     public static String relatorioHorariosMovimento() {
         List<model.Venda> vendas = VendaController.obterVendas();
@@ -104,8 +146,8 @@ public class AdminController {
     }
 
     /**
-     * Relatório de estoque baixo (produtos abaixo do mínimo).
-     * Considera quantidade <= 5 como baixo.
+     * Gera relatório de produtos com estoque baixo (quantidade menor ou igual a 5).
+     * @return Lista de produtos com estoque baixo.
      */
     public static List<Produto> relatorioEstoqueBaixo() {
         Map<String, Integer> mapaEstoque = EstoqueController.getMapaProdutos();
@@ -124,14 +166,16 @@ public class AdminController {
     }
 
     /**
-     * Relatório de caixa detalhado (quantidade de cada denominação).
+     * Gera relatório detalhado do caixa (quantidade de cada denominação).
+     * @return Mapa de denominação para quantidade.
      */
     public static java.util.Map<model.enums.Dinheiro, Integer> relatorioCaixaDetalhado() {
         return CaixaService.getCaixaDetalhado();
     }
 
     /**
-     * Relatório geral resumido.
+     * Gera relatório geral resumido do sistema.
+     * @return String com resumo das principais informações.
      */
     public static String relatorioResumoGeral() {
         StringBuilder sb = new StringBuilder();
@@ -151,7 +195,8 @@ public class AdminController {
         return sb.toString();
     }
     /**
-     * Relatório de produtos vencidos e próximos do vencimento (até 7 dias).
+     * Gera relatório de produtos vencidos e próximos do vencimento (até 7 dias).
+     * @return String com produtos vencidos ou próximos do vencimento.
      */
     public static String relatorioProdutosVencidos() {
         List<Produto> produtos = listarProdutos();

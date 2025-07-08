@@ -33,9 +33,9 @@ public class TelaAtendimento extends JFrame {
         controller.EstoqueController.carregarEstoque();
         setTitle("Autoatendimento - Cantina Universitária");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1170, 660);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         setResizable(false);
-        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         if (carrinho == null) this.carrinho = new LinkedHashMap<>();

@@ -1,14 +1,14 @@
 #BlueJ package file
-dependency1.from=PagamentoService
-dependency1.to=UsuarioService
+dependency1.from=VendaService
+dependency1.to=EstoqueService
 dependency1.type=UsesDependency
 dependency2.from=VendaService
-dependency2.to=EstoqueService
+dependency2.to=ProdutoService
 dependency2.type=UsesDependency
 dependency3.from=VendaService
-dependency3.to=ProdutoService
+dependency3.to=UsuarioService
 dependency3.type=UsesDependency
-dependency4.from=VendaService
+dependency4.from=PagamentoService
 dependency4.to=UsuarioService
 dependency4.type=UsesDependency
 objectbench.height=93

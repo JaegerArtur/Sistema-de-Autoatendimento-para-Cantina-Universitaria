@@ -28,9 +28,9 @@ public class TelaPagamento extends JFrame {
      */
     public TelaPagamento(String resumoVenda, double total, LinkedHashMap<String, Integer> carrinho, Map<String, Produto> produtoMap, Usuario usuario) {
         setTitle("Pagamento");
-        setSize(1170, 660);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         setResizable(false);
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 

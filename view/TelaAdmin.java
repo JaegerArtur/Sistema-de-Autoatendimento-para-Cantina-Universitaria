@@ -23,9 +23,9 @@ public class TelaAdmin extends JFrame {
      */
     public TelaAdmin() {
         setTitle("Painel Administrativo - Cantina");
-        setSize(1170, 660);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         setResizable(false);
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -204,13 +204,14 @@ public class TelaAdmin extends JFrame {
     }
         // Métodos utilitários para aumentar o tamanho dos popups
     private void setPopupFontSize(int size) {
-        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, size));
+        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, size));
         UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, size));
-        UIManager.put("OptionPane.font", new Font("Arial", Font.PLAIN, size));
-        UIManager.put("TextField.font", new Font("Arial", Font.PLAIN, size));
-        UIManager.put("ComboBox.font", new Font("Arial", Font.PLAIN, size));
-        UIManager.put("Label.font", new Font("Arial", Font.PLAIN, size));
-        UIManager.put("Panel.font", new Font("Arial", Font.PLAIN, size));
+        UIManager.put("OptionPane.font", new Font("Arial", Font.BOLD, size));
+        UIManager.put("TextField.font", new Font("Arial", Font.BOLD, size));
+        UIManager.put("ComboBox.font", new Font("Arial", Font.BOLD, size));
+        UIManager.put("Label.font", new Font("Arial", Font.BOLD, size));
+        UIManager.put("Panel.font", new Font("Arial", Font.BOLD, size));
+        UIManager.put("OptionPane.minimumSize", new Dimension(1200, 600));
     }
 
     private void resetPopupFontSize() {
@@ -221,6 +222,7 @@ public class TelaAdmin extends JFrame {
         UIManager.put("ComboBox.font", UIManager.getDefaults().getFont("ComboBox.font"));
         UIManager.put("Label.font", UIManager.getDefaults().getFont("Label.font"));
         UIManager.put("Panel.font", UIManager.getDefaults().getFont("Panel.font"));
+        UIManager.put("OptionPane.minimumSize", null);
     }
 
     // Teclado numérico customizado para touchscreen (agora em components)

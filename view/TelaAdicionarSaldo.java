@@ -29,9 +29,9 @@ public class TelaAdicionarSaldo extends JFrame {
     public TelaAdicionarSaldo(Membro membro) {
         this.membro = membro;
         setTitle("Adicionar Saldo");
-        setSize(600, 400);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         setResizable(false);
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(20, 20));
 
@@ -84,12 +84,30 @@ public class TelaAdicionarSaldo extends JFrame {
                     controller.UsuarioController.alterarSaldo(membro.getCpf(), valorAdicionado);
                     double novoSaldo = controller.UsuarioController.consultarSaldo(membro.getCpf());
                     saldoLabel.setText("Saldo atual: R$ " + String.format("%.2f", membro.getSaldo()));
+                    UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 36));
+                    UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 36));
+                    UIManager.put("OptionPane.minimumSize", new Dimension(1200, 600));
                     JOptionPane.showMessageDialog(this, "Saldo adicionado com sucesso!\nNovo saldo: R$ " + String.format("%.2f", membro.getSaldo()), "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    UIManager.put("OptionPane.messageFont", UIManager.getDefaults().getFont("OptionPane.messageFont"));
+                    UIManager.put("OptionPane.buttonFont", UIManager.getDefaults().getFont("OptionPane.buttonFont"));
+                    UIManager.put("OptionPane.minimumSize", null);
                 } catch (Exception ex) {
+                    UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 36));
+                    UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 36));
+                    UIManager.put("OptionPane.minimumSize", new Dimension(1200, 600));
                     JOptionPane.showMessageDialog(this, "Erro ao adicionar saldo: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    UIManager.put("OptionPane.messageFont", UIManager.getDefaults().getFont("OptionPane.messageFont"));
+                    UIManager.put("OptionPane.buttonFont", UIManager.getDefaults().getFont("OptionPane.buttonFont"));
+                    UIManager.put("OptionPane.minimumSize", null);
                 }
             } else {
+                UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 36));
+                UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 36));
+                UIManager.put("OptionPane.minimumSize", new Dimension(1200, 600));
                 JOptionPane.showMessageDialog(this, "Nenhum valor informado.", "Atenção", JOptionPane.WARNING_MESSAGE);
+                UIManager.put("OptionPane.messageFont", UIManager.getDefaults().getFont("OptionPane.messageFont"));
+                UIManager.put("OptionPane.buttonFont", UIManager.getDefaults().getFont("OptionPane.buttonFont"));
+                UIManager.put("OptionPane.minimumSize", null);
             }
         }
     }
